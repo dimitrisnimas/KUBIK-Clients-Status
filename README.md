@@ -2,8 +2,6 @@
 
 A simple, clean, and modern web application to monitor the status of multiple websites in real-time. This tool provides a clear overview of which sites are up or down, their response times, and their associated hosting packages.
 
-![Website Status Checker Screenshot](https://i.imgur.com/example.png) <!-- It's recommended to replace this with an actual screenshot of your application -->
-
 ## Features
 
 - **Real-time Status Monitoring**: Checks website status asynchronously without reloading the page.
