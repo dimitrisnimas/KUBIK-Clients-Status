@@ -25,7 +25,7 @@ async function checkWebsiteStatus(url, timeout = 10000) {
         if (response.status >= 200 && response.status < 400) {
             return { status: 'Up', responseTime: `${responseTimeMs} ms` };
         } else {
-            return { status: `Down (${response.status})`, responseTime: 'N/A' };
+            return { status: `Down (${response.status})`, responseTime: 'N' };
         }
     } catch (error) {
         clearTimeout(timeoutId);
@@ -94,7 +94,7 @@ async function renderStatuses() {
                 <span class="project-name">${website.name}</span>
                 ${statusDetails}
             </div>
-            <div class="service-details">Hosting: ${website.hosting}</div>
+            <div class="service-details">${website.hosting}</div>
         `;
         card.appendChild(projectContainer);
         
@@ -102,7 +102,7 @@ async function renderStatuses() {
         const statusPill = projectContainer.querySelector('.pill');
 
         if (website.manualStatus) {
-            responseTimeEl.textContent = 'N/A';
+            responseTimeEl.textContent = '';
             statusPill.textContent = website.manualStatus;
             statusPill.classList.remove('loading');
             statusPill.classList.add('unknown');
