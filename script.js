@@ -25,7 +25,7 @@ async function checkWebsiteStatus(url, timeout = 10000) {
         if (response.status >= 200 && response.status < 400) {
             return { status: 'Up', responseTime: `${responseTimeMs} ms` };
         } else {
-            return { status: `Down (${response.status})`, responseTime: 'N' };
+            return { status: `Down (${response.status})`, responseTime: '' };
         }
     } catch (error) {
         clearTimeout(timeoutId);
