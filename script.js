@@ -37,89 +37,129 @@ async function checkWebsiteStatus(url, timeout = 10000) {
     }
 }
 
-// Function to update the status table
-function updateStatusTable(websites) {
-    const tableBody = document.querySelector('#status-table tbody');
-    tableBody.innerHTML = ''; // Clear existing table content
-
-    websites.forEach(website => {
-        const row = document.createElement('tr');
-
-        // Website Name cell
-        const websiteCell = document.createElement('td');
-        websiteCell.classList.add('website');
-        websiteCell.textContent = website.name;
-        row.appendChild(websiteCell);
-
-        // Status cell with a badge
-        const statusCell = document.createElement('td');
-        statusCell.classList.add('status');
-        const statusBadge = document.createElement('span');
-        statusBadge.classList.add('status-badge', 'loading');
-        statusBadge.textContent = 'Loading';
-        statusCell.appendChild(statusBadge);
-        row.appendChild(statusCell);
-
-        // Response Time cell
-        const responseTimeCell = document.createElement('td');
-        responseTimeCell.classList.add('response-time');
-        responseTimeCell.textContent = '...';
-        row.appendChild(responseTimeCell);
-
-        // Hosting Package cell
-        const hostingCell = document.createElement('td');
-        hostingCell.classList.add('hosting-package');
-        hostingCell.textContent = website.hosting;
-        row.appendChild(hostingCell);
-
-        tableBody.appendChild(row);
-
-        // If a manual status is set, display it and skip the check.
-        if (website.manualStatus) {
-            statusBadge.textContent = website.manualStatus;
-            statusBadge.classList.remove('loading');
-            statusBadge.classList.add('hosting-off');
-            responseTimeCell.textContent = 'N/A';
-            return; // Skip to the next website
-        }
-
-        // Check website status and update the row
-        checkWebsiteStatus(website.url).then(data => {
-            statusBadge.textContent = data.status;
-            statusBadge.classList.remove('loading');
-            
-            if (data.status.toLowerCase().includes('down') || data.status.toLowerCase().includes('error')) {
-                statusBadge.classList.add('down');
-            } else if (data.status.toLowerCase().includes('check ssl')) {
-                statusBadge.classList.add('warning');
-            } else {
-                statusBadge.classList.add('up');
-            }
-            
-            responseTimeCell.textContent = data.responseTime;
-        });
-    });
-}
-
 // List of websites to check
 const websites = [
-    { name: "Dimitris Nimas", url: "https://dimitrisnimas.gr", hosting: "GitHub" },
-    { name: "Kubik Digital", url: "https://kubik.gr", hosting: "GitHub" },
-    { name: "O Babis Platanos", url: "https://obabisplatanos.gr", hosting: "GitHub" },
-    { name: "Tzepeto Bar", url: "https://tzepetobar.gr/", hosting: "Shared Hosting (USA)" },
-    { name: "SEPAM", url: "https://sepam.gr", hosting: "Business Hosting (GR)" },
-    { name: "Computer Mathematica", url: "https://computermathematica.gr", hosting: "Shared Hosting (GR)" },
-    { name: "Be Vintage", url: "https://bevintage.gr", hosting: "Shared Hosting (GR)" },
-    { name: "Code Mentor", url: "https://codementor.gr", hosting: "Business Hosting (USA)" },
-    { name: "Sauvage Night Club", url: "https://sauvagenightclub.eu", hosting: "N/A", manualStatus: "DEACTIVATED" },
+	{ name: "Resenco Energy", url: "https://dimitrisnimas.gr", hosting: "Shared Hosting (GR)" },
 	{ name: "Tolidis Parts", url: "https://tolidisparts.gr", hosting: "VPS (GR)" },
-	{ name: "6 GEMS", url: "https://6gems.gr", hosting: "Shared Hosting (GR)" },
-	{ name: "Solar Projects", url: "https://solarprojects.gr", hosting: "Shared Hosting (GR)" },
-	{ name: "Resenco Energy", url: "https://sauvagenightclub.eu", hosting: "Coming Soon - Shared Hosting (GR)" },
 	{ name: "Auto Tol", url: "https://autotol.gr", hosting: "Shared Hosting (GR)" },
+	{ name: "Solar Projects", url: "https://solarprojects.gr", hosting: "Shared Hosting (GR)" },
+	{ name: "Be Vintage", url: "https://bevintage.gr", hosting: "Shared Hosting (GR)" },
+	{ name: "6 GEMS", url: "https://6gems.gr", hosting: "Shared Hosting (GR)" },
+	{ name: "Computer Mathematica", url: "https://computermathematica.gr", hosting: "Shared Hosting (GR)" },
+	{ name: "Tzepeto Bar", url: "https://tzepetobar.gr/", hosting: "Business Hosting (USA)" },
+    { name: "SEPAM", url: "https://sepam.gr", hosting: "Business Hosting (GR)" },
+	{ name: "Code Mentor", url: "https://codementor.gr", hosting: "Business Hosting (USA)" },
+    { name: "Sauvage Night Club", url: "https://sauvagenightclub.eu", hosting: "", manualStatus: "DEACTIVATED" },
+    { name: "O Babis Platanos", url: "https://obabisplatanos.gr", hosting: "GitHub" },
+	{ name: "Dimitris Nimas", url: "https://dimitrisnimas.gr", hosting: "GitHub" },
+    { name: "Kubik Digital", url: "https://kubik.gr", hosting: "GitHub" },
 ];
 
-// Initialize the status check when the page is ready
+const containerEl = document.getElementById("status-container");
+const updatedEl = document.getElementById("last-updated");
+const refreshBtn = document.getElementById("refresh-btn");
+const globalBadge = document.getElementById("global-badge");
+const globalDot = globalBadge.querySelector(".dot");
+const globalText = document.getElementById("global-text");
+
+let isRefreshing = false;
+
+// Function to render the website statuses
+async function renderStatuses() {
+    if (isRefreshing) return;
+    isRefreshing = true;
+    refreshBtn.disabled = true;
+    
+    containerEl.innerHTML = ''; // Clear previous content
+    globalDot.className = 'dot dot-unknown';
+    globalText.textContent = 'Checking...';
+
+    const card = document.createElement("div");
+    card.className = "card";
+    containerEl.appendChild(card);
+
+    const checkPromises = websites.map(website => {
+        const projectContainer = document.createElement('div');
+        projectContainer.className = 'project-container';
+
+        const statusDetails = `
+            <div class="status-details">
+                <span class="response-time">...</span>
+                <span class="pill loading">Loading...</span>
+            </div>
+        `;
+
+        projectContainer.innerHTML = `
+            <div class="project-line">
+                <span class="project-name">${website.name}</span>
+                ${statusDetails}
+            </div>
+            <div class="service-details">Hosting: ${website.hosting}</div>
+        `;
+        card.appendChild(projectContainer);
+        
+        const responseTimeEl = projectContainer.querySelector('.response-time');
+        const statusPill = projectContainer.querySelector('.pill');
+
+        if (website.manualStatus) {
+            responseTimeEl.textContent = 'N/A';
+            statusPill.textContent = website.manualStatus;
+            statusPill.classList.remove('loading');
+            statusPill.classList.add('unknown');
+            return Promise.resolve({ status: 'manual' });
+        }
+
+        return checkWebsiteStatus(website.url).then(data => {
+            statusPill.textContent = data.status;
+            statusPill.classList.remove('loading');
+            
+            if (data.status.toLowerCase().includes('down') || data.status.toLowerCase().includes('error')) {
+                statusPill.classList.add('danger');
+            } else if (data.status.toLowerCase().includes('check ssl')) {
+                statusPill.classList.add('warn');
+            } else {
+                statusPill.classList.add('success');
+            }
+            
+            responseTimeEl.textContent = data.responseTime;
+            return data;
+        });
+    });
+
+    const results = await Promise.allSettled(checkPromises);
+    
+    const statuses = results
+        .filter(r => r.status === 'fulfilled' && r.value.status)
+        .map(r => r.value.status.toLowerCase());
+    
+    let worstStatus = 'success';
+    if (statuses.some(s => s.includes('down') || s.includes('error'))) {
+        worstStatus = 'danger';
+    } else if (statuses.some(s => s.includes('check ssl'))) {
+        worstStatus = 'warn';
+    }
+
+    globalDot.className = 'dot';
+    if (worstStatus === 'danger') {
+        globalDot.classList.add('dot-danger');
+        globalText.textContent = 'Major Outage';
+    } else if (worstStatus === 'warn') {
+        globalDot.classList.add('dot-warn');
+        globalText.textContent = 'Degraded Performance';
+    } else {
+        globalDot.classList.add('dot-success');
+        globalText.textContent = 'All Systems Operational';
+    }
+
+    const now = new Date();
+    updatedEl.textContent = "Last Updated: " + now.toLocaleString();
+    
+    isRefreshing = false;
+    refreshBtn.disabled = false;
+}
+
+// Initialize and set up refresh logic
 document.addEventListener('DOMContentLoaded', () => {
-    updateStatusTable(websites);
+    renderStatuses();
+    refreshBtn.addEventListener('click', renderStatuses);
 });
