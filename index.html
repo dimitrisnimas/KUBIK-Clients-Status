@@ -5,42 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow"> <!-- Prevent indexing by search engines -->
     <title>Website Status Checker</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="/index.css">
 </head>
 <body>
     <div class="container">
-        <h1>
-			KUBIK Websites Status
-		</h1>
-        <div id="status-table-container">
-            <table id="status-table">
-                <thead>
-                    <tr>
-                        <th class="website">Website Name</th>
-                        <th class="status">Status</th>
-                        <th class="response-time">Response Time</th>
-                        <th class="hosting-package">Hosting Package</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Data rows will be dynamically inserted here -->
-                </tbody>
-            </table>                       
-        </div>
-        <br><br>
-        <div style="display: flex; justify-content: center; align-items: center;">
-			Developed by
-			<a title="link" href="https://kubik.gr" target="_blank" rel="noopener noreferrer">
-				<img decoding="async" style="height: 20px; margin-left: 5px;" src="https://kubik.gr/public-images/Kubik-Black.png" alt="Kubik" />
-			</a>
-		</div>
+        <header class="hero">
+            <div class="title-wrap">
+                <h1>Website Status Checker</h1>
+                <p class="subtitle">Real-time status of our services and websites.</p>
+            </div>
+            <div class="controls">
+                <div class="badge" id="global-badge" aria-live="polite">
+                    <span class="dot dot-unknown"></span>
+                    <span id="global-text">Checking status…</span>
+                </div>
+                <button class="refresh" id="refresh-btn" type="button">↻ Refresh</button>
+            </div>
+        </header>
+
+        <main class="grid" id="status-container" aria-live="polite" aria-busy="true">
+            <!-- Website statuses will be dynamically inserted here -->
+        </main>
+        
+        <div class="last-updated" id="last-updated">Last Updated: —</div>
+        
+        <footer class="copyright">
+            Powered by <a href="https://dimitrisnimas.gr" target="_blank" rel="noopener noreferrer">Dimitris Nimas</a>
+        </footer>
     </div>
 
     <script src="script.js"></script>
-<script type="module" src="/index.tsx"></script>
 </body>
 </html>
