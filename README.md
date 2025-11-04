@@ -70,4 +70,4 @@ No special setup is required. Simply open the `index.html` file in your web brow
 
 ## Credits
 
-This project was created and is powered by **Dimitris Nimas**.
+This project was created by **Dimitris Nimas** and is powered by **KUBIK**.
