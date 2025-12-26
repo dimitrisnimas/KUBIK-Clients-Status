@@ -39,8 +39,10 @@ async function checkWebsiteStatus(url, timeout = 10000) {
 
 // List of websites to check
 const websites = [
-	{ name: "Resenco Energy", url: "https://dimitrisnimas.gr", hosting: "Shared Hosting (GR)" },
+	{ name: "Resenco Energy", url: "https://resenco.eu", hosting: "Shared Hosting (GR)" },
 	{ name: "Tolidis Parts", url: "https://tolidisparts.gr", hosting: "VPS (GR)" },
+	{ name: "Guest Tolidis Parts", url: "https://guest.tolidisparts.gr", hosting: "VPS (GR)" },
+	{ name: "Apothiki Tolidis Parts", url: "https://apothiki.tolidisparts.gr", hosting: "VPS (GR)" },
 	{ name: "Auto Tol", url: "https://autotol.gr", hosting: "Shared Hosting (GR)" },
 	{ name: "Solar Projects", url: "https://solarprojects.gr", hosting: "Shared Hosting (GR)" },
 	{ name: "Be Vintage", url: "https://bevintage.gr", hosting: "Shared Hosting (GR)" },
@@ -51,8 +53,10 @@ const websites = [
 	{ name: "Code Mentor", url: "https://codementor.gr", hosting: "Business Hosting (USA)" },
     { name: "Sauvage Night Club", url: "https://sauvagenightclub.eu", hosting: "", manualStatus: "DEACTIVATED" },
     { name: "O Babis Platanos", url: "https://obabisplatanos.gr", hosting: "GitHub" },
-	{ name: "Dimitris Nimas", url: "https://dimitrisnimas.gr", hosting: "GitHub" },
-    { name: "Kubik Digital", url: "https://kubik.gr", hosting: "GitHub" },
+	{ name: "Dimitris Nimas", url: "https://dimitrisnimas.gr", hosting: "GitHub / Netlify" },
+    { name: "Kubik Digital", url: "https://kubik.gr", hosting: "GitHub / Netlify" },
+	{ name: "KUBIK Portal", url: "https://portal.kubik.gr", hosting: "GitHub / Netlify / Render" },
+	{ name: "Online Delivery App", url: "https://onlinedelivery.kubik.gr", hosting: "", manualStatus: "Coming Soon" },
 ];
 
 const containerEl = document.getElementById("status-container");
