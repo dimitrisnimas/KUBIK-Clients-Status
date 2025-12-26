@@ -43,6 +43,7 @@ const websites = [
 	{ name: "Tolidis Parts", url: "https://tolidisparts.gr", hosting: "VPS (GR)" },
 	{ name: "Guest Tolidis Parts", url: "https://guest.tolidisparts.gr", hosting: "VPS (GR)" },
 	{ name: "Apothiki Tolidis Parts", url: "https://apothiki.tolidisparts.gr", hosting: "VPS (GR)" },
+	{ name: "Hello Trikala", url: "https://trikalaguide.kubik.gr", hosting: "Shared Hosting (GR)" },
 	{ name: "Auto Tol", url: "https://autotol.gr", hosting: "Shared Hosting (GR)" },
 	{ name: "Solar Projects", url: "https://solarprojects.gr", hosting: "Shared Hosting (GR)" },
 	{ name: "Be Vintage", url: "https://bevintage.gr", hosting: "Shared Hosting (GR)" },
