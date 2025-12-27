@@ -56,8 +56,8 @@ const websites = [
     { name: "O Babis Platanos", url: "https://obabisplatanos.gr", hosting: "GitHub" },
 	{ name: "Dimitris Nimas", url: "https://dimitrisnimas.gr", hosting: "GitHub / Netlify" },
     { name: "Kubik Digital", url: "https://kubik.gr", hosting: "GitHub / Netlify" },
-	{ name: "KUBIK Portal", url: "https://portal.kubik.gr", hosting: "GitHub / Netlify / Render" },
-	{ name: "Online Delivery App", url: "https://onlinedelivery.kubik.gr", hosting: "", manualStatus: "Coming Soon" },
+	{ name: "KUBIK Portal", url: "https://portal.kubik.gr", hosting: "GitHub / Netlify / Render / Neon" },
+	{ name: "Online Delivery App", url: "https://onlinedelivery.kubik.gr", hosting: "GitHub / Netlify / Render / Neon", manualStatus: "Coming Soon" },
 ];
 
 const containerEl = document.getElementById("status-container");
